@@ -1,0 +1,313 @@
+html {
+  font-size: clamp(14px, calc(0.25vw + 13px), 16px);
+}
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  color: #111;
+  background: #fff;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #fff;
+}
+
+button,
+select,
+input,
+a {
+  font: inherit;
+}
+
+main {
+  width: min(1040px, calc(100vw - 24px));
+  margin: 18px auto 40px;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.subhead {
+  margin: 4px 0 0;
+  color: #707070;
+  font-size: 0.75rem;
+}
+
+.stage {
+  font-size: 0.75rem;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 0.625rem;
+  padding: 4px 8px;
+}
+
+.settings {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px 10px;
+  margin-bottom: 10px;
+}
+
+.settings label {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.settings label > span {
+  font-size: 0.6875rem;
+  color: #666;
+}
+
+select {
+  min-width: 0;
+  width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid #ddd;
+  border-radius: 0.4375rem;
+  background: #fff;
+  color: #111;
+}
+
+select:disabled {
+  color: #999;
+  background: #f7f7f7;
+}
+
+.range-control {
+  grid-column: span 2;
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: #111;
+}
+
+.runtime {
+  display: flex;
+  gap: 8px 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 8px 0;
+  min-height: 22px;
+  color: #666;
+  font-size: 0.6875rem;
+}
+
+.runtime strong {
+  color: #111;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.viewport {
+  position: relative;
+  width: 100%;
+  background: #111;
+  overflow: hidden;
+  border-radius: 0.625rem;
+}
+
+video,
+.viewport > canvas:not(.hidden) {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+video {
+  object-fit: contain;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.busy {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.66);
+  font-size: 0.8125rem;
+}
+
+.busy span {
+  max-width: 720px;
+  color: #ddd;
+  font-size: 0.6875rem;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+button,
+a.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 9px 14px;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button.secondary,
+a.button.secondary {
+  background: #eee;
+  color: #111;
+}
+
+button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.hint,
+.offline-status {
+  margin: 10px 0 0;
+  color: #666;
+  font-size: 0.75rem;
+  min-height: 18px;
+}
+
+.hint.warning {
+  color: #b42318;
+}
+
+.diagnostics {
+  display: flex;
+  gap: 8px 14px;
+  flex-wrap: wrap;
+  margin-top: 7px;
+  color: #707070;
+  font-size: 0.6875rem;
+}
+
+.benchmark {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e4e4e4;
+  border-radius: 0.5625rem;
+  font-size: 0.6875rem;
+}
+
+.benchmark > div {
+  display: flex;
+  gap: 8px 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.benchmark > div span {
+  color: #707070;
+}
+
+.benchmark p {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 5px 0 0;
+}
+
+.benchmark p span {
+  color: #666;
+}
+
+.benchmark p strong {
+  font-weight: 500;
+  text-align: right;
+}
+
+.offline-status {
+  color: #555;
+}
+
+@media (max-width: 760px) {
+  .settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .range-control {
+    grid-column: span 1;
+  }
+
+  .runtime strong {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    width: min(100% - 16px, 1040px);
+    margin-top: 10px;
+  }
+
+  .settings {
+    grid-template-columns: 1fr;
+  }
+
+  .benchmark p {
+    display: grid;
+    gap: 2px;
+  }
+
+  .benchmark p strong {
+    text-align: left;
+  }
+}

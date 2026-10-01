@@ -1,0 +1,9 @@
+{
+  "name": "YOLOE Local Visual Prompt",
+  "short_name": "YOLOE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "description": "Prompt-baked YOLOE-26 localization and segmentation running locally in the browser."
+}

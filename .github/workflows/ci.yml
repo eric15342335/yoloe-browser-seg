@@ -1,0 +1,30 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run format:check
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run deadcode
+      - run: bun run build
+      - run: test -n "$(find dist/assets -name '*.map' -print -quit)"
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run a11y
+      - run: |
+          CHROME_PATH="$(bun -e "import { chromium } from '@playwright/test'; process.stdout.write(chromium.executablePath())")" bun run lhci
+
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: cd backend && uv sync
+      - run: uv run --project backend ruff check --config ruff.toml backend scripts
+      - run: uv run --project backend ruff format --check --config ruff.toml backend scripts
+      - run: cd backend && uv run python -m compileall main.py

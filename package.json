@@ -1,0 +1,49 @@
+{
+  "name": "yoloe-browser-seg",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "typecheck": "tsc -b --pretty false",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "deadcode": "knip",
+    "deadcode:fix": "knip --fix",
+    "a11y": "playwright test tests/a11y.spec.ts",
+    "test": "bun run a11y",
+    "preview": "vite preview --host 0.0.0.0",
+    "lhci": "lhci autorun",
+    "py:lint": "uv run --project backend ruff check --config ruff.toml backend scripts",
+    "py:format": "uv run --project backend ruff format --config ruff.toml backend scripts",
+    "py:format:check": "uv run --project backend ruff format --check --config ruff.toml backend scripts",
+    "source:zip": "uv run --project backend python scripts/package_source.py"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@sentry/browser": "^11.1.0",
+    "@xstate/react": "^6.1.0",
+    "comlink": "^4.4.2",
+    "onnxruntime-web": "^1.30.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "xstate": "^5.33.2"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.63.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "knip": "^6.38.0",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
+    "oxlint-tsgolint": "^7.0.2003",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1"
+  },
+  "packageManager": "bun@1.4.2"
+}

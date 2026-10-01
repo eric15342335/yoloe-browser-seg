@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "sortImports": true,
+  "ignorePatterns": [
+    "dist/**",
+    "node_modules/**",
+    "backend/.venv/**",
+    ".agents/**",
+    ".codex/**",
+    "public/downloads/**",
+    "public/ort/**",
+    "public/comlink.mjs",
+    "test-results/**",
+    "playwright-report/**",
+    "*.tsbuildinfo",
+    ".lighthouseci/**"
+  ]
+}

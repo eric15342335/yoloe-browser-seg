@@ -1,0 +1,66 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "warn",
+    "pedantic": "off",
+    "style": "off",
+    "restriction": "off",
+    "nursery": "off"
+  },
+  "plugins": ["eslint", "oxc", "typescript", "unicorn", "react", "jsx-a11y", "import", "promise"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "options": {
+    "typeAware": true,
+    "maxWarnings": 0
+  },
+  "rules": {
+    "no-unused-vars": "error",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "react/react-in-jsx-scope": "off",
+    "no-await-in-loop": "off",
+    "unicorn/no-array-sort": "off",
+    "import/no-unassigned-import": "off",
+    "import/no-named-as-default": "off",
+    "typescript/no-unsafe-type-assertion": "off",
+    "typescript/consistent-return": "off"
+  },
+  "overrides": [
+    {
+      "files": ["public/sw.js"],
+      "env": {
+        "serviceworker": true
+      },
+      "rules": {
+        "import/no-absolute-path": "off"
+      }
+    },
+    {
+      "files": ["vite.config.ts", "playwright.config.ts", "tests/**/*.ts"],
+      "env": {
+        "node": true
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "dist/**",
+    "backend/**",
+    ".agents/**",
+    ".codex/**",
+    "public/ort/**",
+    "public/comlink.mjs",
+    "vite.config.d.ts",
+    "vite.config.js",
+    "playwright.config.d.ts",
+    "playwright.config.js",
+    "test-results/**",
+    "playwright-report/**",
+    "*.tsbuildinfo",
+    ".lighthouseci/**"
+  ]
+}

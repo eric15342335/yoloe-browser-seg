@@ -1,0 +1,10 @@
+target-version = "py311"
+line-length = 100
+extend-exclude = ["backend/.venv", ".agents", ".codex"]
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
