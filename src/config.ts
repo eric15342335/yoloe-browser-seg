@@ -1,88 +1,31 @@
-export type ModelId =
-  | 'yoloe-26n'
-  | 'yoloe-26s'
-  | 'yoloe-26m'
-  | 'yoloe-26l'
-  | 'yoloe-26x'
-  | 'yoloe-26n-seg.pt'
-  | 'yoloe-26s-seg.pt'
-  | 'yoloe-26m-seg.pt'
-  | 'yoloe-26l-seg.pt'
-  | 'yoloe-26x-seg.pt'
+import appConfig from '../app.config.json'
 
+declare const modelIdBrand: unique symbol
+
+export type ModelId = string & { readonly [modelIdBrand]: true }
 export type ModelTask = 'detect' | 'segment'
 export type BackendId = 'wasm' | 'webgpu'
 export type CameraMode = 'max' | '1080p' | '720p' | '480p'
 
-export const MODELS: ReadonlyArray<{
+type ModelSpec = {
   id: ModelId
   label: string
   task: ModelTask
   checkpoint: string
-}> = [
-  {
-    id: 'yoloe-26n',
-    label: 'YOLOE-26n Object Localization',
-    task: 'detect',
-    checkpoint: 'yoloe-26n-seg.pt',
-  },
-  {
-    id: 'yoloe-26s',
-    label: 'YOLOE-26s Object Localization',
-    task: 'detect',
-    checkpoint: 'yoloe-26s-seg.pt',
-  },
-  {
-    id: 'yoloe-26m',
-    label: 'YOLOE-26m Object Localization',
-    task: 'detect',
-    checkpoint: 'yoloe-26m-seg.pt',
-  },
-  {
-    id: 'yoloe-26l',
-    label: 'YOLOE-26l Object Localization',
-    task: 'detect',
-    checkpoint: 'yoloe-26l-seg.pt',
-  },
-  {
-    id: 'yoloe-26x',
-    label: 'YOLOE-26x Object Localization',
-    task: 'detect',
-    checkpoint: 'yoloe-26x-seg.pt',
-  },
-  {
-    id: 'yoloe-26n-seg.pt',
-    label: 'YOLOE-26n Segmentation',
-    task: 'segment',
-    checkpoint: 'yoloe-26n-seg.pt',
-  },
-  {
-    id: 'yoloe-26s-seg.pt',
-    label: 'YOLOE-26s Segmentation',
-    task: 'segment',
-    checkpoint: 'yoloe-26s-seg.pt',
-  },
-  {
-    id: 'yoloe-26m-seg.pt',
-    label: 'YOLOE-26m Segmentation',
-    task: 'segment',
-    checkpoint: 'yoloe-26m-seg.pt',
-  },
-  {
-    id: 'yoloe-26l-seg.pt',
-    label: 'YOLOE-26l Segmentation',
-    task: 'segment',
-    checkpoint: 'yoloe-26l-seg.pt',
-  },
-  {
-    id: 'yoloe-26x-seg.pt',
-    label: 'YOLOE-26x Segmentation',
-    task: 'segment',
-    checkpoint: 'yoloe-26x-seg.pt',
-  },
-]
+  yaml?: string
+}
 
-export const PROCESSING_SIZES = [256, 320, 416, 512, 640] as const
+export const APP_VERSION = appConfig.version
+export const DEFAULT_MODEL = appConfig.defaultModel as ModelId
+export const DEFAULT_PROCESSING_SIZE = appConfig.defaultProcessingSize
+export const MODELS: ReadonlyArray<ModelSpec> = appConfig.models.map((model) => ({
+  id: model.id as ModelId,
+  label: model.label,
+  task: model.task as ModelTask,
+  checkpoint: model.checkpoint,
+  ...('yaml' in model ? { yaml: model.yaml } : {}),
+}))
+export const PROCESSING_SIZES = appConfig.processingSizes
 
 export const CAMERA_MODES: ReadonlyArray<{ id: CameraMode; label: string }> = [
   { id: 'max', label: 'Maximum available' },
@@ -91,8 +34,16 @@ export const CAMERA_MODES: ReadonlyArray<{ id: CameraMode; label: string }> = [
   { id: '480p', label: '640 × 480' },
 ]
 
-function modelSpec(id: ModelId) {
+function modelSpec(id: ModelId): ModelSpec {
   return MODELS.find((model) => model.id === id) ?? MODELS[0]
+}
+
+export function isModelId(value: string): value is ModelId {
+  return MODELS.some((model) => model.id === value)
+}
+
+export function isProcessingSize(value: number): boolean {
+  return PROCESSING_SIZES.includes(value)
 }
 
 export function modelLabel(id: ModelId): string {

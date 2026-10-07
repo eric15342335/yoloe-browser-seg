@@ -1,14 +1,12 @@
 import * as Comlink from 'comlink'
 
-import type { ModelId } from './config'
-
 type SavedModelMeta = {
-  modelName: ModelId
+  modelName: string
   inputSize: number
   savedAt: string
 }
 
-type SavedModel = {
+export type SavedModel = {
   buffer: ArrayBuffer
   metadata: SavedModelMeta
 }

@@ -1,0 +1,73 @@
+{
+  "version": "12",
+  "defaultModel": "yoloe-26n",
+  "defaultProcessingSize": 320,
+  "processingSizes": [256, 320, 416, 512, 640],
+  "models": [
+    {
+      "id": "yoloe-26n",
+      "label": "YOLOE-26n Object Localization",
+      "task": "detect",
+      "checkpoint": "yoloe-26n-seg.pt",
+      "yaml": "yoloe-26n.yaml"
+    },
+    {
+      "id": "yoloe-26s",
+      "label": "YOLOE-26s Object Localization",
+      "task": "detect",
+      "checkpoint": "yoloe-26s-seg.pt",
+      "yaml": "yoloe-26s.yaml"
+    },
+    {
+      "id": "yoloe-26m",
+      "label": "YOLOE-26m Object Localization",
+      "task": "detect",
+      "checkpoint": "yoloe-26m-seg.pt",
+      "yaml": "yoloe-26m.yaml"
+    },
+    {
+      "id": "yoloe-26l",
+      "label": "YOLOE-26l Object Localization",
+      "task": "detect",
+      "checkpoint": "yoloe-26l-seg.pt",
+      "yaml": "yoloe-26l.yaml"
+    },
+    {
+      "id": "yoloe-26x",
+      "label": "YOLOE-26x Object Localization",
+      "task": "detect",
+      "checkpoint": "yoloe-26x-seg.pt",
+      "yaml": "yoloe-26x.yaml"
+    },
+    {
+      "id": "yoloe-26n-seg.pt",
+      "label": "YOLOE-26n Segmentation",
+      "task": "segment",
+      "checkpoint": "yoloe-26n-seg.pt"
+    },
+    {
+      "id": "yoloe-26s-seg.pt",
+      "label": "YOLOE-26s Segmentation",
+      "task": "segment",
+      "checkpoint": "yoloe-26s-seg.pt"
+    },
+    {
+      "id": "yoloe-26m-seg.pt",
+      "label": "YOLOE-26m Segmentation",
+      "task": "segment",
+      "checkpoint": "yoloe-26m-seg.pt"
+    },
+    {
+      "id": "yoloe-26l-seg.pt",
+      "label": "YOLOE-26l Segmentation",
+      "task": "segment",
+      "checkpoint": "yoloe-26l-seg.pt"
+    },
+    {
+      "id": "yoloe-26x-seg.pt",
+      "label": "YOLOE-26x Segmentation",
+      "task": "segment",
+      "checkpoint": "yoloe-26x-seg.pt"
+    }
+  ]
+}

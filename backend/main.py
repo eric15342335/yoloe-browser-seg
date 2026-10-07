@@ -23,42 +23,12 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL_DIR = ROOT / "models"
 MODEL_DIR.mkdir(exist_ok=True)
 
-MODEL_SPECS = {
-    "yoloe-26n": {
-        "checkpoint": "yoloe-26n-seg.pt",
-        "yaml": "yoloe-26n.yaml",
-        "task": "detect",
-    },
-    "yoloe-26s": {
-        "checkpoint": "yoloe-26s-seg.pt",
-        "yaml": "yoloe-26s.yaml",
-        "task": "detect",
-    },
-    "yoloe-26m": {
-        "checkpoint": "yoloe-26m-seg.pt",
-        "yaml": "yoloe-26m.yaml",
-        "task": "detect",
-    },
-    "yoloe-26l": {
-        "checkpoint": "yoloe-26l-seg.pt",
-        "yaml": "yoloe-26l.yaml",
-        "task": "detect",
-    },
-    "yoloe-26x": {
-        "checkpoint": "yoloe-26x-seg.pt",
-        "yaml": "yoloe-26x.yaml",
-        "task": "detect",
-    },
-    "yoloe-26n-seg.pt": {"checkpoint": "yoloe-26n-seg.pt", "task": "segment"},
-    "yoloe-26s-seg.pt": {"checkpoint": "yoloe-26s-seg.pt", "task": "segment"},
-    "yoloe-26m-seg.pt": {"checkpoint": "yoloe-26m-seg.pt", "task": "segment"},
-    "yoloe-26l-seg.pt": {"checkpoint": "yoloe-26l-seg.pt", "task": "segment"},
-    "yoloe-26x-seg.pt": {"checkpoint": "yoloe-26x-seg.pt", "task": "segment"},
-}
-DEFAULT_MODEL = "yoloe-26n"
-ALLOWED_IMGSZ = {256, 320, 416, 512, 640}
-DEFAULT_IMGSZ = int(os.getenv("YOLOE_IMGSZ", "320"))
-APP_VERSION = "12"
+APP_CONFIG = json.loads((ROOT / "app.config.json").read_text(encoding="utf-8"))
+MODEL_SPECS = {spec["id"]: spec for spec in APP_CONFIG["models"]}
+DEFAULT_MODEL = APP_CONFIG["defaultModel"]
+ALLOWED_IMGSZ = set(APP_CONFIG["processingSizes"])
+DEFAULT_IMGSZ = int(os.getenv("YOLOE_IMGSZ", str(APP_CONFIG["defaultProcessingSize"])))
+APP_VERSION = str(APP_CONFIG["version"])
 
 export_lock = asyncio.Lock()
 DATA_DIR = ROOT / "data"

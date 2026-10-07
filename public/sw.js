@@ -1,6 +1,27 @@
 import * as Comlink from '/comlink.mjs'
 
-const APP_CACHE = 'yoloe-app-v12'
+const APP_CACHE_PREFIX = 'yoloe-app-v'
+let appCachePromise
+
+function appCache() {
+  if (!appCachePromise) {
+    appCachePromise = (async () => {
+      try {
+        const response = await fetch('/api/version', { cache: 'no-store' })
+        if (response.ok) {
+          const data = await response.json()
+          if (data.version) {
+            return { name: `${APP_CACHE_PREFIX}${data.version}`, authoritative: true }
+          }
+        }
+      } catch {}
+
+      const existing = (await caches.keys()).find((key) => key.startsWith(APP_CACHE_PREFIX))
+      return { name: existing ?? `${APP_CACHE_PREFIX}offline`, authoritative: false }
+    })()
+  }
+  return appCachePromise
+}
 const MODEL_CACHE = 'yoloe-model-v3'
 const MODEL_URL = '/__offline/model.onnx'
 const META_URL = '/__offline/model.json'
@@ -8,7 +29,7 @@ const META_URL = '/__offline/model.json'
 self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
-      const cache = await caches.open(APP_CACHE)
+      const cache = await caches.open((await appCache()).name)
       try {
         const response = await fetch('/', { cache: 'reload' })
         if (response.ok) await cache.put('/', response)
@@ -19,7 +40,20 @@ self.addEventListener('install', (event) => {
 })
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim())
+  event.waitUntil(
+    (async () => {
+      const current = await appCache()
+      if (current.authoritative) {
+        const keys = await caches.keys()
+        await Promise.all(
+          keys
+            .filter((key) => key.startsWith(APP_CACHE_PREFIX) && key !== current.name)
+            .map((key) => caches.delete(key)),
+        )
+      }
+      await self.clients.claim()
+    })(),
+  )
 })
 
 self.addEventListener('fetch', (event) => {
@@ -33,7 +67,7 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     (async () => {
-      const cache = await caches.open(APP_CACHE)
+      const cache = await caches.open((await appCache()).name)
       const cached = await cache.match(request)
       try {
         const response = await fetch(request)
@@ -49,7 +83,7 @@ self.addEventListener('fetch', (event) => {
 
 const api = {
   async saveApp(urls) {
-    const cache = await caches.open(APP_CACHE)
+    const cache = await caches.open((await appCache()).name)
     let saved = 0
     for (const value of urls) {
       const url = new URL(value, self.location.origin)

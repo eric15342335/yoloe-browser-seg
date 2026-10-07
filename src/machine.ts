@@ -1,27 +1,38 @@
 import { assign, setup } from 'xstate'
 
+import type { ModelId } from './config'
+
 export type Point = { x: number; y: number }
+
+export type LoadedModel = {
+  buffer: ArrayBuffer
+  modelName: ModelId
+  inputSize: number
+}
 
 type Ctx = {
   capture: Blob | null
   polygon: Point[]
-  model: ArrayBuffer | null
+  model: LoadedModel | null
   error: string | null
 }
+
+export type AppEvent =
+  | { type: 'CAPTURED'; blob: Blob }
+  | { type: 'POLYGON'; points: Point[] }
+  | { type: 'EXPORT' }
+  | { type: 'EXPORTED'; model: LoadedModel }
+  | { type: 'LOAD_MODEL'; model: LoadedModel }
+  | { type: 'MODEL_READY' }
+  | { type: 'RELOAD' }
+  | { type: 'FAIL'; message: string }
+  | { type: 'RESET' }
 
 export const appMachine = setup({
   types: {
     context: {} as Ctx,
-    events: {} as
-      | { type: 'CAPTURED'; blob: Blob }
-      | { type: 'POLYGON'; points: Point[] }
-      | { type: 'EXPORT' }
-      | { type: 'EXPORTED'; model: ArrayBuffer }
-      | { type: 'LOAD_MODEL'; model: ArrayBuffer }
-      | { type: 'MODEL_READY' }
-      | { type: 'RELOAD' }
-      | { type: 'FAIL'; message: string }
-      | { type: 'RESET' },
+    events: {} as AppEvent,
+    tags: {} as 'settingsLocked',
   },
   guards: {
     hasPrompt: ({ context }) => !!context.capture && context.polygon.length >= 3,
@@ -60,6 +71,7 @@ export const appMachine = setup({
       },
     },
     exporting: {
+      tags: 'settingsLocked',
       on: {
         EXPORTED: {
           target: 'loading',
@@ -67,8 +79,14 @@ export const appMachine = setup({
         },
       },
     },
-    loading: { on: { MODEL_READY: 'running' } },
-    running: { on: { RELOAD: 'loading' } },
+    loading: {
+      tags: 'settingsLocked',
+      on: { MODEL_READY: 'running' },
+    },
+    running: {
+      tags: 'settingsLocked',
+      on: { RELOAD: 'loading' },
+    },
     error: {},
   },
 })
